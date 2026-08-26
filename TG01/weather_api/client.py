@@ -1,6 +1,8 @@
 import logging
+import ssl
 
 import aiohttp
+import certifi
 from django.conf import settings
 from pydantic import AliasChoices, BaseModel, Field
 
@@ -59,7 +61,8 @@ async def _get_weather_session() -> aiohttp.ClientSession:
     global _weather_session   
 
     if _weather_session is None or _weather_session.closed:
-        connector = aiohttp.TCPConnector(ssl=False)
+        ssl_context = ssl.create_default_context(cafile=certifi.where())
+        connector = aiohttp.TCPConnector(ssl=ssl_context)
         _weather_session = aiohttp.ClientSession(connector=connector)
 
     return _weather_session

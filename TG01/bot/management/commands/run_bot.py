@@ -7,16 +7,13 @@ from django.conf import settings
 from django.core.management.base import BaseCommand
 
 from bot.handlers import router
+from weather_api.client import close_weather_session
 
 logger = logging.getLogger(__name__)
 
 class Command(BaseCommand):
     help = "Запуск Telegram бота"
     def handle(self, *args, **options):
-        logging.basicConfig(
-            level=logging.INFO,
-            format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
-            )
         self.stdout.write(self.style.SUCCESS("Запуск бота..."))
 
         try:
@@ -25,16 +22,23 @@ class Command(BaseCommand):
             self.stdout.write(self.style.WARNING("Бот остановлен пользователем."))
 
     async def _run_bot(self):
-        logger.info("Асинхронный запуск выполнен.")
-
         bot = Bot(token=settings.BOT.token)
-
         storage = RedisStorage.from_url(settings.REDIS.url)
-
         dp = Dispatcher(storage=storage)
+
         dp.include_router(router)
 
-        self.stdout.write(self.style.SUCCESS('Бот успешно запущен (FSM Redis)'))
+        dp.shutdown.register(shutdown)
+
+        await bot.delete_webhook(drop_pending_updates=True)
+
+        logger.info("Бот запущен.")
+        
         await dp.start_polling(bot)
 
-    
+async def shutdown(bot: Bot)
+    logger.info('Завершение работы бота')
+
+    await close_weather_session()
+
+    logger.info('Закрытие сессии бота')

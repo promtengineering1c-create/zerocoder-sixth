@@ -60,3 +60,9 @@ async def _get_weather_session() -> aiohttp.ClientSession:
         _weather_session = aiohttp.ClientSession()
 
     return _weather_session
+
+async def close_weather_session():
+    global _weather_session
+    if _weather_session is not None and not _weather_session.closed:
+        await _weather_session.close()
+        logger.info("HTTP-сессия с OpenWeather успешно закрыта.")

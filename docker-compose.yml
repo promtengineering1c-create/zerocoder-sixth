@@ -1,0 +1,12 @@
+services:
+  redis:
+    image: redis:7-alpine  # Используем легковесную версию на базе Alpine Linux
+    container_name: weather_bot_redis
+    ports:
+      - "6379:6379"  # Левая часть — порт на твоем компьютере, правая — порт внутри контейнера
+    restart: unless-stopped  # Автоматический перезапуск при сбоях или рестарте Docker
+    volumes:
+      - redis_data:/data  # Сохраняем данные на диск, чтобы они пережили перезапуск контейнера
+
+volumes:
+  redis_data:

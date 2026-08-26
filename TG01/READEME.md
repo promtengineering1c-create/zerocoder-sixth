@@ -26,6 +26,17 @@
 ## 5. Автоматизация (DevOps)
 *   **Management Command:** Написан идемпотентный скрипт `core/management/commands/init_project.py` для автоматического создания суперпользователя на основе данных из окружения.
 
+
+rm -r .venv
+python -m pip cache purge
+python -m venv venv.
+.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+pip install -r requirements.txt
+
+Remove-Item -Recurse -Force .venv -ErrorAction SilentlyContinue; python -m pip cache purge; python -m venv .venv; .venv\Scripts\python -m pip install --upgrade pip; .venv\Scripts\python -m pip install -r requirements.txt
+
+
 django-admin startproject <my_project> .
 django-admin startapp <my_app>
 

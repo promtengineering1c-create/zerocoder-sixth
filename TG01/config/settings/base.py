@@ -26,7 +26,7 @@ class EnvironmentSettings(BaseSettings):
 
     OPENWEATHER_API_KEY: str
 
-    REDIS_URL: str
+    REDIS_URL: str = "redis://127.0.0.1:6379/0"
 
     model_config = SettingsConfigDict(
         env_file=BASE_DIR / '.env',

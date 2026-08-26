@@ -38,10 +38,12 @@ async def get_weather_by_city(city_name: str) -> dict | None:
         async with session.get(api_url, params=params, timeout=10) as response:
             if response.status == 200:
                 raw_data = await response.json()
+                # print(raw_data)
                 data = OpenWeatherResponse(**raw_data)
 
                 return {
                     "temp": round(data.main.temp),
+                    "feels_like": round(data.main.feels_like),
                     "description": data.weather[0].description
                 }
             elif response.status == 404:
@@ -57,12 +59,13 @@ async def _get_weather_session() -> aiohttp.ClientSession:
     global _weather_session   
 
     if _weather_session is None or _weather_session.closed:
-        _weather_session = aiohttp.ClientSession()
+        connector = aiohttp.TCPConnector(ssl=False)
+        _weather_session = aiohttp.ClientSession(connector=connector)
 
     return _weather_session
 
 async def close_weather_session():
-    global _weather_session
+
     if _weather_session is not None and not _weather_session.closed:
         await _weather_session.close()
         logger.info("HTTP-сессия с OpenWeather успешно закрыта.")

@@ -5,9 +5,9 @@ from aiogram import Bot, Dispatcher
 from aiogram.fsm.storage.redis import RedisStorage
 from django.conf import settings
 from django.core.management.base import BaseCommand
+from weather_api.client import close_weather_session
 
 from bot.handlers import router
-from weather_api.client import close_weather_session
 
 logger = logging.getLogger(__name__)
 
@@ -28,7 +28,7 @@ class Command(BaseCommand):
 
         dp.include_router(router)
 
-        dp.shutdown.register(shutdown)
+        dp.shutdown.register(on_shutdown)
 
         await bot.delete_webhook(drop_pending_updates=True)
 
@@ -36,7 +36,7 @@ class Command(BaseCommand):
         
         await dp.start_polling(bot)
 
-async def shutdown(bot: Bot)
+async def on_shutdown(bot: Bot) -> None:
     logger.info('Завершение работы бота')
 
     await close_weather_session()

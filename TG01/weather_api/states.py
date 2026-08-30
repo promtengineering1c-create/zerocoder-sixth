@@ -1,3 +1,6 @@
+"""
+Состояния для бота для хранения в Redis
+"""
 from aiogram.fsm.state import State, StatesGroup
 
 

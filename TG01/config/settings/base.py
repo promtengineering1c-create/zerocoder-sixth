@@ -16,6 +16,13 @@ class WeatherSettings(BaseModel):
 class RedisSettings(BaseModel):
     url: str = "redis://127.0.0.1:6379/0"
 
+class FileManagerSettings(BaseModel):
+    img_dir: Path = BASE_DIR / "bot" / "media" / "img"
+    voice_dir: Path = BASE_DIR / "bot" / "media" / "voice"
+
+class TranslatorSettings(BaseModel):
+    credentials_path: str    
+
 class EnvironmentSettings(BaseSettings):
     DEBUG: bool = False
     SECRET_KEY: str
@@ -27,6 +34,9 @@ class EnvironmentSettings(BaseSettings):
     OPENWEATHER_API_KEY: str
 
     REDIS_URL: str = "redis://127.0.0.1:6379/0"
+
+    img_dir: Path = BASE_DIR / "bot" / "media" / "img"
+    voice_dir: Path = BASE_DIR / "bot" / "media" / "voice"
 
     model_config = SettingsConfigDict(
         env_file=BASE_DIR / '.env',
@@ -46,6 +56,10 @@ class EnvironmentSettings(BaseSettings):
     def redis(self) -> RedisSettings:
         return RedisSettings(url=self.REDIS_URL)
 
+    @property
+    def files(self) -> FileManagerSettings:
+        return FileManagerSettings()
+
 env = EnvironmentSettings()
 
 SECRET_KEY = env.SECRET_KEY
@@ -56,6 +70,8 @@ ALLOWED_HOSTS = [host.strip() for host in env.ALLOWED_HOSTS.split(',') if host.s
 BOT = env.bot
 WEATHER = env.weather
 REDIS = env.redis
+
+FILES = env.files
 
 DJANGO_APPS = [
     'django.contrib.admin',

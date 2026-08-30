@@ -1,3 +1,6 @@
+"""
+Клиент для работы с API погоды
+"""
 import logging
 import ssl
 

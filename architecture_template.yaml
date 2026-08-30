@@ -1,0 +1,141 @@
+project_name: b2b_saas_mvp
+root:
+  name: zerocoder-sixth
+  is_directory: true
+  description: 'TODO: Описать назначение директории'
+  children:
+  - name: .gigacode
+    is_directory: true
+    description: 'TODO: Описать назначение директории'
+    children:
+    - name: plans
+      is_directory: true
+      description: 'TODO: Описать назначение директории'
+  - name: .gitignore
+    is_directory: false
+    description: 'TODO: Описать назначение файла'
+  - name: docker-compose.yml
+    is_directory: false
+    description: 'TODO: Описать назначение файла'
+  - name: LeetCode
+    is_directory: true
+    description: 'TODO: Описать назначение директории'
+    children:
+    - name: main.py
+      is_directory: false
+      description: 'TODO: Добавить docstring в файл'
+  - name: project_scanner.py
+    is_directory: false
+    description: 'TODO: Добавить docstring в файл'
+  - name: TG01
+    is_directory: true
+    description: 'TODO: Описать назначение директории'
+    children:
+    - name: bot
+      is_directory: true
+      description: 'TODO: Добавить docstring в файл'
+      children:
+      - name: __init__.py
+        is_directory: false
+        description: 'TODO: Добавить docstring в файл'
+      - name: apps.py
+        is_directory: false
+        description: 'TODO: Добавить docstring в файл'
+      - name: handlers.py
+        is_directory: false
+        description: 'TODO: Ошибка парсинга файла'
+      - name: management
+        is_directory: true
+        description: 'TODO: Добавить docstring в файл'
+        children:
+        - name: __init__.py
+          is_directory: false
+          description: 'TODO: Добавить docstring в файл'
+        - name: commands
+          is_directory: true
+          description: 'TODO: Добавить docstring в файл'
+          children:
+          - name: __init__.py
+            is_directory: false
+            description: 'TODO: Добавить docstring в файл'
+          - name: run_bot.py
+            is_directory: false
+            description: 'TODO: Добавить docstring в файл'
+      - name: migrations
+        is_directory: true
+        description: 'TODO: Добавить docstring в файл'
+        children:
+        - name: __init__.py
+          is_directory: false
+          description: 'TODO: Добавить docstring в файл'
+      - name: models.py
+        is_directory: false
+        description: 'TODO: Добавить docstring в файл'
+    - name: config
+      is_directory: true
+      description: 'TODO: Добавить docstring в файл'
+      children:
+      - name: __init__.py
+        is_directory: false
+        description: 'TODO: Добавить docstring в файл'
+      - name: asgi.py
+        is_directory: false
+        description: ASGI config for config project. It exposes the ASGI callable
+          as a module-level variable named ``application``. For more information on
+          this file, see https://docs.djangoproject.com/en/6.1/howto/deployment/asgi/
+      - name: settings
+        is_directory: true
+        description: 'TODO: Добавить docstring в файл'
+        children:
+        - name: __init__.py
+          is_directory: false
+          description: 'TODO: Добавить docstring в файл'
+        - name: base.py
+          is_directory: false
+          description: 'TODO: Добавить docstring в файл'
+        - name: local.py
+          is_directory: false
+          description: 'TODO: Добавить docstring в файл'
+        - name: prodaction.py
+          is_directory: false
+          description: 'TODO: Добавить docstring в файл'
+      - name: urls.py
+        is_directory: false
+        description: 'TODO: Добавить docstring в файл'
+      - name: wsgi.py
+        is_directory: false
+        description: WSGI config for config project. It exposes the WSGI callable
+          as a module-level variable named ``application``. For more information on
+          this file, see https://docs.djangoproject.com/en/6.1/howto/deployment/wsgi/
+    - name: manage.py
+      is_directory: false
+      description: Django's command-line utility for administrative tasks.
+    - name: READEME.md
+      is_directory: false
+      description: 'TODO: Описать назначение файла'
+    - name: static
+      is_directory: true
+      description: 'TODO: Описать назначение директории'
+    - name: weather_api
+      is_directory: true
+      description: 'TODO: Добавить docstring в файл'
+      children:
+      - name: __init__.py
+        is_directory: false
+        description: 'TODO: Добавить docstring в файл'
+      - name: apps.py
+        is_directory: false
+        description: 'TODO: Добавить docstring в файл'
+      - name: client.py
+        is_directory: false
+        description: Клиент для работы с API погоды
+      - name: migrations
+        is_directory: true
+        description: 'TODO: Добавить docstring в файл'
+        children:
+        - name: __init__.py
+          is_directory: false
+          description: 'TODO: Добавить docstring в файл'
+      - name: states.py
+        is_directory: false
+        description: Состояния для бота для хранения в Redis

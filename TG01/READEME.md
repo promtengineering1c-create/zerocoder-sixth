@@ -29,12 +29,12 @@
 
 rm -r .venv
 python -m pip cache purge
-python -m venv venv.
+py -3.12 -m venv .venv
 .venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
 pip install -r requirements.txt
 
-Remove-Item -Recurse -Force .venv -ErrorAction SilentlyContinue; python -m pip cache purge; python -m venv .venv; .venv\Scripts\python -m pip install --upgrade pip; .venv\Scripts\python -m pip install -r requirements.txt
+Remove-Item -Recurse -Force .venv -ErrorAction SilentlyContinue; python -m pip cache purge; py -3.12 -m venv .venv; .venv\Scripts\python -m pip install --upgrade pip; .venv\Scripts\python -m pip install -r requirements.txt
 
 
 django-admin startproject <my_project> .

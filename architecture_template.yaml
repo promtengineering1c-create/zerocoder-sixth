@@ -14,6 +14,9 @@ root:
   - name: .gitignore
     is_directory: false
     description: 'TODO: Описать назначение файла'
+  - name: architecture_template.yaml
+    is_directory: false
+    description: 'TODO: Описать назначение файла'
   - name: docker-compose.yml
     is_directory: false
     description: 'TODO: Описать назначение файла'
@@ -33,17 +36,17 @@ root:
     children:
     - name: bot
       is_directory: true
-      description: 'TODO: Добавить docstring в файл'
+      description: Телеграмм бот
       children:
       - name: __init__.py
         is_directory: false
-        description: 'TODO: Добавить docstring в файл'
+        description: Телеграмм бот
       - name: apps.py
         is_directory: false
         description: 'TODO: Добавить docstring в файл'
       - name: handlers.py
         is_directory: false
-        description: 'TODO: Ошибка парсинга файла'
+        description: 'TODO: Добавить docstring в файл'
       - name: management
         is_directory: true
         description: 'TODO: Добавить docstring в файл'
@@ -61,6 +64,24 @@ root:
           - name: run_bot.py
             is_directory: false
             description: 'TODO: Добавить docstring в файл'
+      - name: media
+        is_directory: true
+        description: 'TODO: Описать назначение директории'
+        children:
+        - name: img
+          is_directory: true
+          description: 'TODO: Описать назначение директории'
+          children:
+          - name: AgACAgIAAxkBAAICO2qUATy9LllULOBGYQ3J9HWUvjxkAAIUI2sbeMGgSIEvCA6t3Zh9AQADAgADeQADPQQ.jpg
+            is_directory: false
+            description: 'TODO: Описать назначение файла'
+        - name: voice
+          is_directory: true
+          description: 'TODO: Описать назначение директории'
+          children:
+          - name: _ Alt.ogg
+            is_directory: false
+            description: 'TODO: Описать назначение файла'
       - name: migrations
         is_directory: true
         description: 'TODO: Добавить docstring в файл'
@@ -69,6 +90,22 @@ root:
           is_directory: false
           description: 'TODO: Добавить docstring в файл'
       - name: models.py
+        is_directory: false
+        description: 'TODO: Добавить docstring в файл'
+      - name: services
+        is_directory: true
+        description: Вспомогательные функции для бота
+        children:
+        - name: __init__.py
+          is_directory: false
+          description: Вспомогательные функции для бота
+        - name: files.py
+          is_directory: false
+          description: Сохранение файлов полученных в боте
+        - name: translator.py
+          is_directory: false
+          description: Асинхронный перевод текста через бесплатный web-API Google.
+      - name: states.py
         is_directory: false
         description: 'TODO: Добавить docstring в файл'
     - name: config

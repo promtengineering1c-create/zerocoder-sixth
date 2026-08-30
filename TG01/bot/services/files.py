@@ -1,3 +1,6 @@
+"""
+Сохранение файлов полученных в боте
+"""
 from aiogram import Bot
 from aiogram.types import Message
 from config.settings.base import FILES

@@ -1,15 +1,21 @@
 from aiogram import Bot, F, Router
 from aiogram.filters import Command, CommandStart, StateFilter
 from aiogram.fsm.context import FSMContext
-from aiogram.types import FSInputFile, Message
+from aiogram.types import (
+    CallbackQuery,
+    FSInputFile,
+    InlineKeyboardButton,
+    InlineKeyboardMarkup,
+    Message,
+)
 from config.settings.base import FILES
 from weather_api.client import get_weather_by_city
 from weather_api.states import WeatherStates
 
+from .services.db_students import get_student_or_none, save_student
 from .services.files import save_user_photo
 from .services.translator import translate_text
-from config.settings.base import FILES
-from .states import TranslationFSM
+from .states import RegistrationFSM, TranslationFSM
 
 router = Router()
 @router.message(CommandStart())
@@ -81,4 +87,85 @@ async def process_translation_text(message: Message, state: FSMContext):
     await message.answer(f"🇬🇧 Перевод:\n{translated_text}")
     
     await state.clear()
-     
+
+@router.message(Command("register"))    
+async def cmd_register_start(message: Message, state: FSMContext):
+    student = await get_student_or_none(message.from_user.id)
+
+    if student:
+        keyboard = InlineKeyboardMarkup(
+            inline_keyboard=[
+            [    
+            InlineKeyboardButton(text="👀 Посмотреть данные", callback_data="profile_view"),
+            InlineKeyboardButton(text="✏️ Обновить данные", callback_data="profile_update")
+            ]    
+            ]
+        )
+        await message.answer(text="Вы уже зарегистрированы. Выберите действие", reply_markup=keyboard)
+    else:
+        await message.answer(text="Создание записи. Введите ваше имя:")
+        await state.set_state(RegistrationFSM.waiting_for_name)  
+
+@router.callback_query(F.data == "profile_view")
+async def process_profile_view(callback: CallbackQuery):
+    student = await get_student_or_none(callback.from_user.id)
+
+    if student:
+        text = (
+            f"📋 <b>Ваша анкета:</b>\n\n"
+            f"Имя: {student.name}\n"
+            f"Возраст: {student.age}\n"
+            f"Класс: {student.grade}"
+        )
+
+        await callback.message.edit_text(text, parse_mode="HTML")
+    else:
+        await callback.message.edit_text("⚠️ Запись не найдена")  
+
+    await callback.answer()
+
+@router.callback_query(F.data == "profile_update")    
+async def process_profile_update(callback: CallbackQuery, state: FSMContext):
+    await callback.message.edit_text("Запускаем обновление. Введите свое имя")
+    await state.set_state(RegistrationFSM.waiting_for_name)
+    await callback.answer()
+
+@router.message(StateFilter(RegistrationFSM.waiting_for_name), F.text)
+async def process_name(message: Message, state: FSMContext):
+    await state.update_data(name=message.text.strip())
+
+    await message.answer("Отлично. Теперь напиши свой возраст (только цифрой, например: 15):")
+    await state.set_state(RegistrationFSM.waiting_for_age)
+
+@router.message(StateFilter(RegistrationFSM.waiting_for_age), F.text)
+async def process_age(message: Message, state: FSMContext):
+    if not message.text.isdigit():
+        await message.answer("Возраст должен быть числом. Попробуй еще раз:")
+        return
+        
+    await state.update_data(age=int(message.text))
+    
+    await message.answer("И последнее: в каком ты классе?")
+    await state.set_state(RegistrationFSM.waiting_for_grade)
+
+@router.message(StateFilter(RegistrationFSM.waiting_for_grade), F.text)
+async def process_grade(message: Message, state: FSMContext):
+    grade = message.text.strip()
+    
+    user_data = await state.get_data()
+    
+    await save_student(
+        user_id=message.from_user.id,
+        name=user_data['name'],
+        age=user_data['age'],
+        grade=grade
+    )
+    
+    await message.answer(
+        f"✅ Запись успешно сохранена!\n\n"
+        f"Имя: {user_data['name']}\n"
+        f"Возраст: {user_data['age']}\n"
+        f"Класс: {grade}"
+    )
+    
+    await state.clear()

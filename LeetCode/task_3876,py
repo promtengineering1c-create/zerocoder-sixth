@@ -1,0 +1,42 @@
+class Solution:
+    def hasArrayTwoCandidates_brute(self, nums: list[int]) -> bool:
+        n = len(nums)
+
+        # Функция-валидатор: проверяет готовую партию
+        def is_valid_batch(arr: list[int]) -> bool:
+            return all(x % 2 == 0 for x in arr) or all(x % 2 != 0 for x in arr)
+
+        # Рекурсивный сборщик дерева решений
+        def backtrack(index: int, current_nums2: list[int]) -> bool:
+            # Базовый случай: мы дошли до конца массива, партия собрана
+            if index == n:
+                return is_valid_batch(current_nums2)
+
+            # Вариант А: Оставляем деталь как есть (nums2[i] = nums[i])
+            current_nums2.append(nums[index])
+            if backtrack(index + 1, current_nums2):
+                return True
+            # Если путь не привел к успеху, откатываем действие (тот самый backtracking)
+            current_nums2.pop()
+
+            # Вариант Б: Пробуем отпилить кусок (nums2[i] = nums[i] - nums[j])
+            # Перебираем все возможные варианты "доноров" (j)
+            for j in range(n):
+                if index != j and nums[index] - nums[j] >= 1:
+                    current_nums2.append(nums[index] - nums[j])
+                    
+                    # Ныряем на следующий уровень рекурсии
+                    if backtrack(index + 1, current_nums2):
+                        return True
+                        
+                    # Откатываем действие
+                    current_nums2.pop()
+
+            # Если ни один из вариантов на этом этапе не сработал
+            return False
+
+        # Запускаем сборку с нулевого индекса и пустым массивом
+        return backtrack(0, [])
+
+sol = Solution()
+answ = sol.hasArrayTwoCandidates_brute([1,4,7])

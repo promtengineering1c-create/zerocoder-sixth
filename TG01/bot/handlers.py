@@ -12,18 +12,65 @@ from config.settings.base import FILES
 from weather_api.client import get_weather_by_city
 from weather_api.states import WeatherStates
 
+from bot import keyboards as kb
+
+from .keyboards import bottom as base_kb
+from .keyboards import dynamic_button as dynamic_kb
+from .keyboards import link_buttoms as link_kb
 from .services.db_students import get_student_or_none, save_student
 from .services.files import save_user_photo
 from .services.translator import translate_text
 from .states import RegistrationFSM, TranslationFSM
 
 router = Router()
+
+# region Урок TG04
+
 @router.message(CommandStart())
 async def cmd_start(message: Message):
     await message.answer(
         "Привет! Я бот для запроса погоды.\n"
-        "Нажми или напиши /weather, чтобы узнать текущую сводку."
+        "Нажми или напиши /weather, чтобы узнать текущую сводку.",
+        reply_markup=base_kb,
         )
+
+@router.message(Command("links"))
+async def cmm_links(message: Message):
+    await message.answer(
+        "Список ссылок:",
+        reply_markup=link_kb,
+        ) 
+
+@router.message(Command("dynamic"))
+async def cmm_dymanic(message: Message):
+    await message.answer(
+        'Доступные опции:',
+        reply_markup=dynamic_kb,
+        )   
+
+@router.callback_query(F.data == "show_more")
+async def show_more(callback: CallbackQuery):
+    keyboard = await kb.create_show_more_keyboard()
+    await callback.message.edit_reply_markup(reply_markup=keyboard)
+    await callback.answer()
+
+@router.callback_query(F.data == "option_1")
+async def option_1(callback: CallbackQuery):
+    await callback.answer(text="Вы выбрали опцию 1")
+
+@router.callback_query(F.data == "option_2")
+async def option_2(callback: CallbackQuery):
+    await callback.answer(text="Вы выбрали опцию 2")
+
+@router.message(F.text == "Привет")
+async def handle_hello(message: Message):
+    await message.answer(f"Привет! {message.from_user.first_name}")
+
+@router.message(F.text == "Пока")
+async def handle_bye(message: Message):
+    await message.answer(f"До свидания! {message.from_user.first_name}")    
+
+# endregion Урок TG04
 
 @router.message(Command("weather"))
 async def cmd_weather_start(message: Message, state: FSMContext):
